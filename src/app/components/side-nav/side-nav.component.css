@@ -1,0 +1,26 @@
+.container{
+    width:100%;
+    height:100%;
+    background-color: #fff;
+    box-sizing: border-box;
+}
+
+.stick{
+    position: sticky;
+    top:4px;
+}
+
+li{
+    list-style: none;
+    padding:15px;
+    cursor: pointer;
+    color:black;
+}
+
+li:hover{
+    border-bottom: 1px solid #FFBD59;
+}
+
+.mat-tab-label {
+    width: 50%;
+}

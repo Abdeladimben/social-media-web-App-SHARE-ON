@@ -1,0 +1,37 @@
+<div class="container">
+    <div class="margin_container">
+        <div class="title_zone">
+            <h1 class="title" (click)="vers()">Share ON</h1>
+        </div>
+        <div class="search">
+            <div>
+                <input type="text" placeholder="Rechercher..." [(ngModel)]="searchText" (keyup)="clear()">
+                <mat-icon class="iconSearch" aria-hidden="false" aria-label="Example home icon" (click)="rechercher()">search</mat-icon>
+            </div>
+            
+            <ul class="list" *ngIf="resultSearchList.length!=0">
+                <li *ngFor="let element of resultSearchList?.reverse()" (click)="versProfil(element.EMAIL)">{{element.NOM_UTILISATEUR}}</li>
+            </ul>
+        </div>
+        <div class="icons">
+            
+            <div class="menu">
+                <button mat-icon-button color="primary" aria-label="Example icon button with a menu icon" [matMenuTriggerFor]="menu">
+                    <mat-icon>menu</mat-icon>
+                </button>
+                <mat-menu #menu="matMenu" >
+                    <button mat-menu-item (click)="profil()">
+                        <mat-icon>person</mat-icon>{{utilisateurNom}}
+                    </button>
+                    <button mat-menu-item (click)="deconnection()">
+                        <mat-icon>logout</mat-icon>Déconnection
+                    </button>
+                </mat-menu>
+            </div>
+        </div>
+
+    </div>
+    
+
+    
+</div>

@@ -1,0 +1,52 @@
+
+<div class="container">
+
+  <div class="poster">
+    <mat-form-field appearance="fill">
+      <textarea matInput [(ngModel)]="text" cdkTextareaAutosize cdkAutosizeMinRows="5" placeholder="Say something..."></textarea>
+    </mat-form-field>
+    <div class="new-post-actions-container">
+      <button  mat-raised-button class="post-button" (click)="poster()">Post</button>
+      
+      <mat-form-field class="image-button">
+        <ngx-mat-file-input class="image-input" #removableInput placeholder="choisir image" (change)="onFileSelected($event)"></ngx-mat-file-input>
+        <button mat-icon-button matSuffix *ngIf="!removableInput.empty" (click)="removableInput.clear($event)">
+          <mat-icon>clear</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <mat-card class="example-card" *ngFor="let post of posts.reverse(),let i = index">
+    <mat-card-header>
+    <img *ngIf="post.PHOTO_DE_PROFIL != null && post.PHOTO_DE_PROFIL != ''" class="photoDeProfil" [src]="post.PHOTO_DE_PROFIL" alt="kkkk">
+      <mat-card-title>{{post.NOM_PROFIL}}</mat-card-title>
+    </mat-card-header>
+    <img mat-card-image *ngIf="post.IMAGE_URL != null && post.IMAGE_URL != ''" class="img-responsive" [src]="post.IMAGE_URL" alt="Photo of a Shiba Inu">
+    <mat-card-content>
+      <p>{{post.TEXT}}</p>
+    </mat-card-content>
+    <mat-card-actions>
+      <div id="likes">
+        <button mat-button (click)="like(post.ID_POST,i)"><mat-icon>{{post.USER_LIKE}}</mat-icon></button>
+        <span>{{post.COUNT_LIKE}} like</span>
+      </div>
+    </mat-card-actions>
+    <div class="comments-container">
+      <div class="comments">
+        <div class="title">
+          Commentaires
+        </div>
+        <p *ngFor="let commentaire of post.COMMENTAIRES?.[0] "><b>{{commentaire?.NOM_UTILISATEUR}} : </b>{{commentaire?.TEXTE}} </p>
+      </div>
+      <div class="comment-input">
+        <mat-form-field class="comment-form-field" >
+          <input matInput [(ngModel)]="commentText[i]" type="text" placeholder="ajouter un commentaire">
+        </mat-form-field>
+        <button class="comment-button" (click)="commentaire(post.ID_POST,i)" mat-button>Comment</button>
+      </div>
+    </div>
+    
+  </mat-card>
+
+</div>

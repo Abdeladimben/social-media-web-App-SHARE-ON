@@ -1,0 +1,86 @@
+<div class="container">
+    <div class="MainTitle">
+        <div class="wall"></div>
+        <div class="logo">
+            <h1>Share ON</h1>
+        </div>
+    </div>
+    <div class="parent">
+        <div class="form-container" *ngIf="loginShow">
+            <div class="FormTitle">Se Connecter</div>
+            <form [formGroup]="loginForm">
+                <mat-form-field appearance="outline">
+                    <mat-label>Entrer un email</mat-label>
+                    <input matInput formControlName="email">
+                    <mat-error *ngIf="loginForm.controls['email'].invalid">
+                        {{loginForm.controls['email'].hasError('required')?'Required':"S'il vous plait entrer un email validé"}}
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label for="pass">Entrer ton mot de passe</mat-label>
+                    <input type="password" matInput formControlName="password">
+                    <mat-error *ngIf="loginForm.controls['password'].invalid">
+                        {{loginForm.controls['password'].hasError('required')?'Required':'Mot de passe doit passer 6 lettre'}}
+                    </mat-error>
+                </mat-form-field>
+            </form>
+            <div class="button-container">
+                <button (click)="login()" [disabled]="loginForm.invalid" mat-raised-button class="login-button">Connecter</button>
+                <div class="line log"></div>
+                <button (click)="changeForm()" mat-button>Créer un compte</button>
+            </div>
+            
+        </div>
+        <div class="form-container" *ngIf="!loginShow">
+            <div class="FormTitle">Créer un compte</div>
+            <form [formGroup]="createAccountForm">
+                <mat-form-field appearance="outline">
+                    <mat-label>Entrer un email</mat-label>
+                    <input matInput formControlName="email">
+                    <mat-error *ngIf="createAccountForm.controls['email'].invalid" >
+                        {{createAccountForm.controls['email'].hasError('required')?'Required':"S'il vous plait entrer un email validé"}}
+                    </mat-error>
+                </mat-form-field>
+                <div class="fullName">
+                    <mat-form-field class="twoColumns" appearance="outline">
+                        <mat-label>Entrer ton nom</mat-label>
+                        <input matInput formControlName="nom">
+                        <mat-error *ngIf="createAccountForm.controls['nom'].invalid" >
+                            {{createAccountForm.controls['nom'].hasError('required')?'Required':'Nom ne peut pas passer 15 lettre'}}
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-form-field class="twoColumns" appearance="outline">
+                        <mat-label>Entrer ton prenom</mat-label>
+                        <input matInput formControlName="prenom">
+                        <mat-error *ngIf="createAccountForm.controls['prenom'].invalid" >
+                            {{createAccountForm.controls['prenom'].hasError('required')?'Required':'Prenom ne peut pas passer 15 lettre'}}
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+                <mat-form-field appearance="outline">
+                    <mat-label for="pass">Entrer ton mot de passe</mat-label>
+                    <input type="password" matInput formControlName="password">
+                    <mat-error *ngIf="createAccountForm.controls['password'].invalid" >
+                        {{createAccountForm.controls['password'].hasError('required')?'Required':'Mot de passe doit passer 6 lettre'}}
+                    </mat-error>
+                </mat-form-field>
+                
+                <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Telephone</mat-label>
+                    <input type="tel" matInput formControlName="telephone">
+                    <mat-error *ngIf="createAccountForm.controls['telephone'].invalid" >
+                        {{createAccountForm.controls['telephone'].hasError('required')?'Required':'10 nombre'}}
+                    </mat-error>
+                </mat-form-field>
+            
+            </form>
+            <div class="button-container">
+                <button [disabled]="createAccountForm.invalid" (click)="createAccount()" mat-raised-button class="login-button">Créer un compte</button>
+                <div class="line"></div>
+                <button (click)="changeForm()" mat-button>Login</button>
+            </div>
+            
+        </div>
+    </div>
+</div>

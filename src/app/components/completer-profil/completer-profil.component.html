@@ -1,0 +1,50 @@
+<div class="container">
+<!--     <div class="margin_container">
+        <p>pour compléter votre profil et profit du tous les avantages <span>cliquez ici</span>.</p>
+    </div> -->
+
+    <div class="margin_container">
+        <div class="form-container">
+            <div class="FormTitle">Profil</div>
+            <div class="circleImg">
+                <label for="photo"><img *ngIf="photoProfilChecked" id="default" [src]="urlImg" alt="uu"></label>
+                <input id="photo" type="file" (change)="onFileSelected($event)">
+            </div>
+            <form [formGroup]="profilForm">
+                <div class="column">
+                    <mat-form-field appearance="outline">
+                        <mat-label for="username">Entrer ton nom d'utilisateur</mat-label>
+                        <input matInput formControlName="username">
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Entrer ton adresse</mat-label>
+                        <input matInput formControlName="adresse">
+                    </mat-form-field>
+                </div>
+                <div class="column">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Genre</mat-label>
+                        <mat-select formControlName="genre" name="genre">
+                          <mat-option *ngFor="let genre of genres" [value]="genre.value">
+                            {{genre.viewValue}}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    <mat-form-field class="date" appearance="outline">
+                        <mat-label>date de naissance</mat-label>
+                        <input matInput [matDatepicker]="picker" formControlName="date_naissance">
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+                </div>
+            </form>
+            <div class="button-container">
+                <button (click)="completer()" [disabled]="profilForm.invalid" mat-raised-button class="login-button">Connecter</button>
+            </div>
+            
+        </div>
+
+    </div>
+
+
+</div>

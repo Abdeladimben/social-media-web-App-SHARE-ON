@@ -1,0 +1,161 @@
+.container{
+    width:45vw;
+    min-height:calc(100vh - 50px) ;
+    background-color:#ccd0ff4d;
+}
+.margin-container {
+    padding-top:100px;
+}
+
+.header{
+    padding-bottom:40px;
+    border-bottom:1px solid #00000029;
+}
+
+.profilPicture {
+    display: grid;
+    justify-items: center;
+    grid-gap: 20px;
+}
+
+.profilPicture img{
+    height: 200px;
+    width: 200px;
+    border-radius:50%;
+    border: 1px solid #00000029;
+}
+
+.profilPicture p{
+    font-size: 45px;
+    font-family: 'Montserrat';
+}
+
+.information{
+    padding:20px 0 20px 50px;
+    border-bottom:1px solid #00000029;
+}
+
+.flex-information{
+    display: grid;
+    grid-template-columns: auto auto;
+}
+
+h2{
+    font-size: 25px;
+    font-family: 'Montserrat';
+}
+
+.label{
+    font-weight:500;
+}
+.reponse{
+    padding-left:20px;
+}
+
+.margin-posts{
+    padding:20px 0 20px 50px;
+}
+
+.poster{
+    max-width: 500px;
+    margin: 25px 0;
+}
+.poster >.mat-form-field{
+    width: 490px;
+    background-color:#f8f6f6a3;
+}
+
+
+.new-post-actions-container{
+    display: flex;
+    flex-direction: row;
+    height: 6vh;
+    align-items: center;
+    justify-content:space-between;
+}
+
+.post-button{
+    background-color: #4285F4;
+    color: white;
+    width: 118px;
+}
+
+.image-button{
+    margin-left: 20px;
+}   
+.image-input{
+    width: 100%;
+}
+
+
+.example-card {
+    min-width: 500px;
+    max-width: 500px;
+    border-radius: 10px;
+    border: 1px solid;
+    border-color:
+        rgb(213, 220, 226)
+        rgb(213, 220, 226)
+        rgb(184, 194, 204);
+    box-sizing: border-box;
+    margin-bottom:20px;
+    background-color:#ffffffa8;
+}
+
+.mat-card-header{
+    align-content: center;
+    align-items: center;
+}
+.mat-card-title{
+    padding:15px;
+}
+
+.photoDeProfil{
+    height: 50px;
+    width: 50px;
+    border: 1px solid #0000000f;
+    border-radius: 50%;
+}
+
+.example-header-image {
+    background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg');
+    background-size: cover;
+}
+mat-card-actions{
+    display: grid;
+    grid-template-columns: auto auto;
+    justify-content: space-between;
+    border-bottom: 1px solid #b5aeae;
+}
+
+
+#likes button mat-icon{
+    color: red;
+}
+
+
+
+.title{
+    font-size: 17px;
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+
+b{
+    font-weight: 450;
+}
+
+.comment-input{
+    margin-top: 30px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height:50px;
+}
+
+.comment-form-field{
+    width: 80%;
+}
+  
+  
+

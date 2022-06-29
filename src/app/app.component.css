@@ -1,0 +1,10 @@
+.header{
+    position: fixed;
+    width:100% ;
+    z-index:10000;
+}
+.main{
+    display:grid;    
+    justify-content: center;
+}
+

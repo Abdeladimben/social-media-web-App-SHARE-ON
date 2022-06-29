@@ -1,0 +1,159 @@
+/* .container{
+    background-color: #07ff0e;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    
+}
+.margin_container{
+    text-align: center;
+    margin:10px 0;
+}
+p{
+    margin:0;
+}
+span{
+    text-decoration:underline;
+    cursor:pointer;
+}
+
+span:hover{
+    color:red;
+}
+ */
+
+ 
+.container{
+    display:flex;
+    height: 100vh;
+    width:100%;
+    background-color: aliceblue;
+}
+
+.margin_container {
+    display:flex;
+    width:70%;
+    margin: 0 15%;
+    justify-content: center;
+}
+
+.circleImg{
+    display:flex;
+    margin-bottom:30px;
+}
+
+label{
+    width:100px;
+    height:100px;
+    background-color:#e3e2f47d;
+    border: 2px solid black;
+    border-radius: 50%;
+    cursor:pointer;
+    display: grid;
+    align-items: center;
+    justify-items: center;
+}
+label img{
+    width:100px;
+    height:100px;
+    border-radius: 50%;
+}
+
+.circleImg #photo{
+    display: none;
+}
+
+
+
+.wall{
+    background-color:#FFBD59;
+    width: 28px;
+    height:80px;
+    position:absolute;
+    top: 47vh;
+    left: 28%;
+}
+
+.MainTitle{
+    display: grid;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo{
+    text-align: center;
+}
+.logo h1{
+    font-family: 'Montserrat', sans-serif;
+    word-spacing: 18px;
+    font-size:50px;
+    position:absolute;
+    /*top: 30%;
+    left: calc(25% - 97px) ;*/
+}
+
+.parent{
+    display: flex;
+    justify-content: center;
+    align-content: center;
+}
+
+
+.form-container{
+    display:flex;
+    flex-direction: column;
+    align-items:center;
+    justify-content: center;
+    margin: 12vh 0;
+    background-color:white;
+    box-shadow: 0 2px 6px 1px rgba(0,0,0,0.2);
+    /*padding:50px;*/
+    padding-bottom: 35px;
+
+}
+
+form{
+    display:flex;
+    flex-direction: column;
+}
+
+.column{
+    margin: 0 20px;
+}
+
+.FormTitle{
+    font-size:22px;
+    margin-bottom: 20px;
+}
+
+mat-form-field{
+    margin:0 10px;
+    width: 18vw;
+}
+.twoColumns{
+    width:9.5vw;
+}
+.fullName .twoColumns:first-child{
+    margin-right: 1vw;
+}
+
+.button-container{
+    display:flex;
+    flex-direction: column;
+    width: 100%;
+    align-items:center;
+}
+.button-container > .line{
+    width:250px;
+    height: 1px;
+    background-color: rgba(0, 0, 0, 0.411);
+    margin-top: 10px;
+}
+.log{
+    margin: 20px 0 10px !important;
+}
+
+.login-button{
+    background-color: #4285F4;
+    color:white;
+}

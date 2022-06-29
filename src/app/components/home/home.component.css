@@ -1,0 +1,181 @@
+
+/*.container{
+    background-color:aliceblue;
+    height: 100vh;
+    position: relative;
+
+    
+}
+.wall{
+    background-color:#FFBD59;
+    width: 28px;
+    height:80px;
+    position:absolute;
+    top: 27vh;
+    left: 28%;
+}
+.logo h1{
+    font-family: 'Montserrat', sans-serif;
+    word-spacing: 18px;
+    font-size:50px;
+    position:absolute;
+    top: 30%;
+    left: calc(25% - 97px) ;
+}
+
+
+
+
+.form-container{
+    display:flex;
+    flex-direction: column;
+    align-items:center;
+    margin-top: 10vh;
+    margin-bottom: 10vh;
+    background-color:white;
+    box-shadow: 0 2px 6px 1px rgba(0,0,0,0.2);
+    padding:50px;
+    padding-bottom: 35px;
+    position: absolute;
+    left:110vh ;
+}
+
+form{
+    display:flex;
+    flex-direction: column;
+}
+.FormTitle{
+    font-size:22px;
+    margin-bottom: 20px;
+}
+
+mat-form-field{
+    *//* margin:10px;*/
+/*    width: 20vw;
+}
+.twoColumns{
+    width:9.5vw;
+}
+.fullName .twoColumns:first-child{
+    margin-right: 1vw;
+}
+
+.button-container{
+    display:flex;
+    flex-direction: column;
+    width: 100%;
+    align-items:center;
+}
+.button-container > .line{
+    width:250px;
+    height: 1px;
+    background-color: rgba(0, 0, 0, 0.411);
+    margin-top: 10px;
+}
+
+.login-button{
+    background-color: #4285F4;
+    color:white;
+}
+
+*/
+
+
+.container{
+    background-color:aliceblue;
+    width: 100vw;
+    height: 100vh;
+    display: grid;
+    grid-template-columns: auto auto;
+    align-items: center;
+}
+.wall{
+    background-color:#FFBD59;
+    width: 28px;
+    height:80px;
+    position:absolute;
+    top: 47vh;
+    left: 28%;
+}
+
+.MainTitle{
+    display: grid;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo{
+    text-align: center;
+}
+.logo h1{
+    font-family: 'Montserrat', sans-serif;
+    word-spacing: 18px;
+    font-size:50px;
+    position:absolute;
+    /*top: 30%;
+    left: calc(25% - 97px) ;*/
+}
+
+.parent{
+    display: flex;
+    justify-content: center;
+    align-content: center;
+}
+
+
+.form-container{
+    display:flex;
+    flex-direction: column;
+    align-items:center;
+    margin-top: 10vh;
+    margin-bottom: 10vh;
+    background-color:white;
+    box-shadow: 0 2px 6px 1px rgba(0,0,0,0.2);
+    padding:50px;
+    padding-bottom: 35px;
+
+}
+
+form{
+    display:flex;
+    flex-direction: column;
+}
+.FormTitle{
+    font-size:22px;
+    margin-bottom: 20px;
+}
+
+mat-form-field{
+    /* margin:10px;*/
+    width: 20vw;
+}
+.twoColumns{
+    width:9.5vw;
+}
+.fullName .twoColumns:first-child{
+    margin-right: 1vw;
+}
+
+.button-container{
+    display:flex;
+    flex-direction: column;
+    width: 100%;
+    align-items:center;
+}
+.button-container > .line{
+    width:250px;
+    height: 1px;
+    background-color: rgba(0, 0, 0, 0.411);
+    margin-top: 10px;
+}
+.log{
+    margin: 20px 0 10px !important;
+}
+
+.login-button{
+    background-color: #4285F4;
+    color:white;
+}
+
+
+
