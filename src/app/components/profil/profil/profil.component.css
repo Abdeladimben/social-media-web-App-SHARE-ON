@@ -1,5 +1,6 @@
 .container{
     width:45vw;
+    min-width: 550px;
     min-height:calc(100vh - 50px) ;
     background-color:#ccd0ff4d;
 }
@@ -31,8 +32,9 @@
 }
 
 .information{
-    padding:20px 0 20px 50px;
+    padding:20px 0;
     border-bottom:1px solid #00000029;
+    display:grid;
 }
 
 .flex-information{
@@ -43,17 +45,22 @@
 h2{
     font-size: 25px;
     font-family: 'Montserrat';
+    text-align:center;
 }
 
 .label{
     font-weight:500;
+    background-color: #fff;
 }
 .reponse{
     padding-left:20px;
 }
 
 .margin-posts{
-    padding:20px 0 20px 50px;
+    /**padding:20px 0 20px 50px;**/
+    display: grid;
+    justify-content: center;
+    justify-items: center;
 }
 
 .poster{
@@ -158,4 +165,68 @@ b{
 }
   
   
+
+/* Landscape phone to portrait tablet */
+@media (min-width: 767px) and (max-width: 936px) {
+
+}
+
+/* Landscape phones and down */
+@media (max-width: 767px) {
+    .container{
+        min-width: 450px;
+    }
+    .profilPicture p{
+        font-size: 30px;
+        font-family: 'Montserrat';
+    }
+    .profilPicture img{
+        height: 150px;
+        width: 150px;
+    }
+    .flex-information{
+        grid-template-columns: auto;
+        width:100%;
+        
+    }
+    .fullName{
+        width:100%;
+        
+    }
+    .otherInformation{
+        width:100%;
+    }
+    .label{
+        display:block;
+    }
+    
+
+    .poster{
+        max-width: 350px;
+    }
+    .poster >.mat-form-field{
+        width: 340px;
+    }
+    .example-card {
+        min-width: 330px;
+        max-width: 330px;
+        
+    }
+
+    
+
+  
+}
+
+@media (max-width: 480px) {  
+    .container{
+        min-width: 300px;
+    }
+}
+
+@media (max-width: 320px) {  
+
+}
+
+
 

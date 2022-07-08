@@ -10,6 +10,8 @@ import { LikeService } from 'src/app/services/like/like.service';
 import { Like } from 'src/app/interfaces/like/like';
 import { Commentaire } from 'src/app/interfaces/commentaire/commentaire';
 import { AmisService } from 'src/app/services/amis/amis.service';
+import { Amis } from 'src/app/interfaces/amis/amis';
+
 @Component({
   selector: 'app-posts',
   templateUrl: './posts.component.html',
@@ -22,6 +24,7 @@ export class PostsComponent implements OnInit {
   text = "";
   posts:Array<Post> = [];
   likes:Array<any> = [];
+  amis:Array<Amis>=[];
   commentText:Array<string> = [];
   myPost:Post ={
     ID_POST:0,
@@ -31,7 +34,7 @@ export class PostsComponent implements OnInit {
     IMAGE_URL: "",
     COUNT_COMMENT: 0,
     COUNT_LIKE: 0,
-    DATE_POST:new Date(0),
+    DATE_POST:'',
     LIKES:[],
     COMMENTAIRES:[],
     USER_LIKE:'favorite',
@@ -49,76 +52,104 @@ export class PostsComponent implements OnInit {
   ngOnInit(): void {
 
     this.likes=[];
-    this.postService.getPosts().then((result:any)=>{
-      result.data.forEach((post:any) => {
-        /*console.log("for");
-        console.log(post);*/
-        
-        this.commentaireService.getCommentairesByPost(post.ID_POST).then(
-          (resultat:any)=>{
-            console.log(resultat);
-            post.COMMENTAIRES=[];
-            post.COMMENTAIRES.push(resultat.data);
-            console.log(post);
-          }
-        ).catch(
-          (error) =>{
-            console.log(error);
-          }
-        )
-        this.likeService.getLikesByPost(post.ID_POST).then(
-          (resultat:any)=>{
-            post.LIKES=[];
-            post.LIKES!.push(resultat.data);
-            console.log(post);
-            this.posts.filter(post=>{post.USER_LIKE='favorite_border'});
-          }
-        ).catch(
-          (error) =>{
-            console.log(error);
-          }
-        )
-        
-      });
+    this.amisService.getAbonnementByUtilisateur(this.email).then(
+      (response:any) => {
+        console.log("response");
+        this.amis=response.data;
+        console.log(this.amis);
 
-      this.likeService.getLikesByUser(localStorage.getItem('email')+'').then(
-        (res:any)=>{
-          if(res.data!=undefined){
+
+        this.postService.getPosts().then((result:any)=>{
+          result.data.forEach((post:any) => {
+            /*console.log("for");
+            console.log(post);*/
             
-            this.likes.push(res.data);
-            console.log(this.likes);
-            console.log("likes kaynine");
-            this.posts.forEach(post=>{
-              console.log('this.likes[0]');
-              console.log(this.likes[0]);
-              this.likes[0].forEach((like:any)=>{
-                console.log('like');
-                console.log(like);
-                console.log("post :"+post.ID_POST+" like :"+like.ID_LIKE+like.ID_POST);
-                if(post.ID_POST==like.ID_POST){
-                  console.error("post.ID_POST==like.ID_POST")
-                  post.USER_LIKE='favorite';
-                }
+            this.commentaireService.getCommentairesByPost(post.ID_POST).then(
+              (resultat:any)=>{
+                //console.log(resultat);
+                post.COMMENTAIRES=[];
+                post.COMMENTAIRES.push(resultat.data);
+                //console.log(post);
+              }
+            ).catch(
+              (error) =>{
+                console.log(error);
+              }
+            )
+            this.likeService.getLikesByPost(post.ID_POST).then(
+              (resultat:any)=>{
+                post.LIKES=[];
+                post.LIKES!.push(resultat.data);
+                //console.log(post);
+                this.posts.filter(post=>{post.USER_LIKE='favorite_border'});
+              }
+            ).catch(
+              (error) =>{
+                console.log(error);
+              }
+            )
+            
+          });
+    
+          this.likeService.getLikesByUser(localStorage.getItem('email')+'').then(
+            (res:any)=>{
+              if(res.data!=undefined){
                 
-              })
+                this.likes.push(res.data);
+                ///console.log(this.likes);
+                ///console.log("likes kaynine");
+                this.posts.forEach(post=>{
+                  //console.log('this.likes[0]');
+                  //console.log(this.likes[0]);
+                  this.likes[0].forEach((like:any)=>{
+                    //console.log('like');
+                    //console.log(like);
+                    //console.log("post :"+post.ID_POST+" like :"+like.ID_LIKE+like.ID_POST);
+                    if(post.ID_POST==like.ID_POST){
+                      //console.error("post.ID_POST==like.ID_POST")
+                      post.USER_LIKE='favorite';
+                    }
+                    
+                  })
+                })
+              }else{
+                //console.log(res);
+                //console.log("likes makayninech");
+              }
+            }
+          )
+          console.log(this.posts);
+          this.amis.forEach((ami:any)=>{
+            
+            result.data.forEach((data:any,index:number)=>{
+              if(ami.EMAIL_UTILISATEUR2==data.EMAIL_UTILISATEUR){
+                this.posts.push(result.data?.[index])
+                console.log(1)
+                console.log(this.posts);
+                
+              }
+              
             })
-          }else{
-            console.log(res);
-            console.log("likes makayninech");
+          })
+
+          //result.data=result.data.filter((post:any) => post.EMAIL_UTILISATEUR)
+          //this.posts=result.data;
+    
+    
+          
+        }).catch(
+          (err) =>{
+            console.log(err);
           }
-        }
-      )
+        )
 
-      
-      this.posts=result.data;
-
-
-      
-    }).catch(
-      (err) =>{
-        console.log(err);
+      }
+    ).catch(
+      (error:any) => {
+        console.log(error);
       }
     )
+    
     
 
   }
@@ -176,7 +207,7 @@ export class PostsComponent implements OnInit {
           COUNT_LIKE:0,
           LIKES:[],
           COMMENTAIRES:[],
-          DATE_POST:new Date(),
+          DATE_POST:new Date().toLocaleString(),
           USER_LIKE:'favorite_border',
           PHOTO_DE_PROFIL:this.profilImage
         }
@@ -200,7 +231,7 @@ export class PostsComponent implements OnInit {
             COUNT_LIKE:0,
             LIKES:[],
             COMMENTAIRES:[],
-            DATE_POST:new Date(),
+            DATE_POST:new Date().toLocaleString(),
             USER_LIKE:'favorite_border',
             PHOTO_DE_PROFIL:this.profilImage
           }
@@ -294,10 +325,18 @@ export class PostsComponent implements OnInit {
     this.commentaireService.createNewCommentaire(myCommentaire).then(
       (res)=>{
         if(idPost==this.posts[this.posts.length-i-1].ID_POST){
-          this.posts[this.posts.length-i-1].COMMENTAIRES?.[0]?.push(myCommentaire);
+          if(this.posts[this.posts.length-i-1].COMMENTAIRES[0]==undefined){
+            this.posts[this.posts.length-i-1].COMMENTAIRES[0]=[myCommentaire];
+            console.log(1);
+          }else{
+            this.posts[this.posts.length-i-1].COMMENTAIRES[0].push(myCommentaire);
+            console.log(2);
+          }
+          
           console.log("ajout commentaire");
           this.posts[this.posts.length-i-1].COUNT_COMMENT++;
           this.commentText[i]="";
+          console.log(this.posts);
         }
 
       }

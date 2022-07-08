@@ -83,20 +83,13 @@ mat-form-field{
 
 .container{
     background-color:aliceblue;
-    width: 100vw;
-    height: 100vh;
+    min-width: 100vw;
+    min-height: 100%;
     display: grid;
     grid-template-columns: auto auto;
     align-items: center;
 }
-.wall{
-    background-color:#FFBD59;
-    width: 28px;
-    height:80px;
-    position:absolute;
-    top: 47vh;
-    left: 28%;
-}
+
 
 .MainTitle{
     display: grid;
@@ -147,13 +140,13 @@ form{
 
 mat-form-field{
     /* margin:10px;*/
-    width: 20vw;
+    width: 260px;
 }
 .twoColumns{
-    width:9.5vw;
+    width:122.5px;
 }
 .fullName .twoColumns:first-child{
-    margin-right: 1vw;
+    margin-right: 13px;
 }
 
 .button-container{
@@ -175,6 +168,46 @@ mat-form-field{
 .login-button{
     background-color: #4285F4;
     color:white;
+}
+
+@media (max-width: 1200px) {  
+    .container{
+        align-items: center;
+        grid-template-columns: auto;
+    }
+    .MainTitle{
+        justify-content: start;
+    }
+    .logo{
+        text-align: center;
+    }
+    .logo h1{
+        padding-left:20px;
+    }
+
+
+}
+/* Landscape phone to portrait tablet */
+@media (max-width: 936px) {
+    .MainTitle{
+        justify-content: start;
+        padding: 0 calc(50% - 150px);
+    }
+
+}
+ 
+/* Landscape phones and down */
+@media (min-width: 480px) and (max-width: 767px) {
+
+    
+}
+
+@media (max-width: 480px) {  
+
+}
+
+@media (max-width: 320px) {  
+
 }
 
 

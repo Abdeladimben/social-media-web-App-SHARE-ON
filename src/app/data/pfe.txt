@@ -1,0 +1,199 @@
+create table utilisateur(
+    email varchar2(100) primary key,
+    nom varchar2(30) ,
+    prenom varchar2(30) ,
+    telephone varchar2(20) ,
+    password varchar2(20) 
+);
+drop table profil;
+
+create table profil(
+    email varchar2(100) primary key,
+    nom_utilisateur varchar2(30) unique,
+    photo_de_profil varchar2(500),
+    adresse varchar2(100),
+    Genre varchar2(10),
+    date_naissance date,
+    constraint fk_profil_email foreign key (email) References utilisateur(email) on delete cascade
+);
+
+create table post(
+    id_post varchar2(20) primary key,
+    email_utilisateur varchar2(100),
+    nom_profil varchar2(30),
+    text varchar2(1000),
+    image_url varchar2(500),
+    count_comment number default 0,
+    count_like number default 0,
+    date_post date,
+    photo_de_profil varchar2(500)
+    constraint fk_post_email_utilisateur foreign key (email_utilisateur) References profil(email) on delete cascade,
+    constraint fk_post_nom_profil foreign key (nom_profil) References profil(nom_utilisateur) on delete cascade
+);
+
+
+create table likes(
+    id_like varchar2(20) primary key,
+    email_utilisateur varchar2(100),
+    id_post varchar2(20),
+    date_like date,
+    constraint fk_likes_email_utilisateur foreign key (email_utilisateur) References profil(email) on delete cascade,
+    constraint fk_likes_id_post foreign key (id_post) References post(id_post) on delete cascade
+);
+
+
+create table commentaires(
+    id_commentaire varchar2(20) primary key,
+    email_utilisateur varchar2(100),
+    nom_utilisateur varchar(30),
+    id_post varchar2(20),
+    texte varchar(500),
+    date_commentaire date,
+    constraint fk_commentaires_email foreign key (email_utilisateur) References profil(email) on delete cascade,
+    constraint fk_commentaires_nom foreign key (nom_utilisateur) References profil(NOM_UTILISATEUR) on delete cascade,
+    constraint fk_commentaires_id_post foreign key (id_post) References post(id_post) on delete cascade
+);
+
+
+create table message(
+    id_message varchar2(20) primary key,
+    email_emetteur varchar2(100),
+    email_recepteur varchar2(100),
+    text varchar2(1000),
+    image_url varchar2(500),
+    date_message date,
+    constraint fk_message_emetteur foreign key (email_emetteur) References profil(email) on delete cascade,
+    constraint fk_message_recepteur foreign key (email_recepteur) References profil(email) on delete cascade
+);
+
+create table amis(
+    id_ami varchar2(20),
+    email_utilisateur1 varchar2(100),
+    email_utilisateur2 varchar2(100),
+    constraint FK_ami_user1 foreign key (email_utilisateur1) references profil(email),
+    constraint FK_ami_user2 foreign key (email_utilisateur2) references profil(email),
+    constraint PK_amis primary key (id_ami,email_utilisateur1,email_utilisateur2)
+);
+
+
+
+//////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////
+
+
+
+
+
+create table UTILISATEUR(
+    EMAIL
+    NOM
+    PRENOM
+    TELEPHONE
+    PASSWORD
+);
+drop table profil;
+
+create table PROFIL(
+    EMAIL
+    NOM_UTILISATEUR
+    PHOTO_DE_PROFIL
+    ADRESSE
+    GENRE
+    DATE_NAISSANCE
+);
+
+create table POST(
+    ID_POST
+    EMAIL_UTILISATEUR
+    NOM_PROFIL
+    TEXT
+    IMAGE_URL
+    COUNT_COMMENT
+    COUNT_LIKE
+    DATE_POST
+    PHOTO_DE_PROFIL
+);
+
+
+create table LIKES(
+    ID_LIKE
+    EMAIL_UTILISATEUR
+    ID_POST
+    DATE_LIKE
+);
+
+
+create table COMMENTAIRES(
+    ID_COMMENTAIRE
+    EMAIL_UTILISATEUR
+    NOM_UTILISATEUR
+    ID_POST
+    TEXTE
+    DATE_COMMENTAIRE
+);
+
+CREATE TABLE MESSAGE(
+    ID_MESSAGE
+    EMAIL_EMETTEUR
+    EMAIL_RECEPTEUR
+    TEXT
+    IMAGE_URL
+    DATE_MESSAGE
+);
+
+CREATE TABLE AMIS (
+    ID_AMI
+    EMAIL_UTILISATEUR1
+    EMAIL_UTILISATEUR2
+);
+
+
+///////////////////////////////////////////////////
+///////////////////////////////////////////////////
+///////////////////////////////////////////////////
+///////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+create or replace trigger incrementLike
+    after insert on likes
+    for each row
+begin
+    update post set count_like=count_like+1 where id_post=:new.id_post; 
+end;
+
+create or replace trigger decrementLike
+    after delete on likes
+    for each row
+begin
+    update post set count_like=count_like-1 where id_post=:old.id_post; 
+end;
+    
+create or replace trigger incrementComment
+    after insert on commentaires
+    for each row
+begin
+    update post set count_comment=count_comment+1 where id_post=:new.id_post; 
+end;
+
+create or replace trigger decrementComment
+    after delete on commentaires
+    for each row
+begin
+    update post set count_comment=count_comment-1 where id_post=:old.id_post; 
+end;
+
+
+
+
+

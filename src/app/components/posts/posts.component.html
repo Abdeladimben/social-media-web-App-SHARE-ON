@@ -17,7 +17,7 @@
     </div>
   </div>
 
-  <mat-card class="example-card" *ngFor="let post of posts.reverse(),let i = index">
+  <mat-card class="example-card" *ngFor="let post of posts.reverse();let i = index">
     <mat-card-header>
     <img *ngIf="post.PHOTO_DE_PROFIL != null && post.PHOTO_DE_PROFIL != ''" class="photoDeProfil" [src]="post.PHOTO_DE_PROFIL" alt="kkkk">
       <mat-card-title>{{post.NOM_PROFIL}}</mat-card-title>
@@ -28,16 +28,16 @@
     </mat-card-content>
     <mat-card-actions>
       <div id="likes">
-        <button mat-button (click)="like(post.ID_POST,i)"><mat-icon>{{post.USER_LIKE}}</mat-icon></button>
+        <button (click)="like(post.ID_POST,i)" mat-icon-button disableRipple="true"><mat-icon>{{post.USER_LIKE}}</mat-icon></button> 
         <span>{{post.COUNT_LIKE}} like</span>
       </div>
     </mat-card-actions>
     <div class="comments-container">
-      <div class="comments">
+      <div class="comments" *ngIf="post.COMMENTAIRES?.[0]!=undefined">
         <div class="title">
           Commentaires
         </div>
-        <p *ngFor="let commentaire of post.COMMENTAIRES?.[0] "><b>{{commentaire?.NOM_UTILISATEUR}} : </b>{{commentaire?.TEXTE}} </p>
+        <p *ngFor="let commentaire of post.COMMENTAIRES?.[0]"><b>{{commentaire?.NOM_UTILISATEUR}} : </b>{{commentaire?.TEXTE}} </p>
       </div>
       <div class="comment-input">
         <mat-form-field class="comment-form-field" >

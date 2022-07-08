@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, LOCALE_ID, OnInit } from '@angular/core';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Router } from '@angular/router';
@@ -15,6 +15,7 @@ import { LikeService } from 'src/app/services/like/like.service';
 import { PostService } from 'src/app/services/post/post.service';
 import { ProfilService } from 'src/app/services/profil/profil.service';
 import { UtilisateurService } from 'src/app/services/utilisateur/utilisateur.service';
+import {formatDate} from '@angular/common';
 
 @Component({
   selector: 'app-profil',
@@ -61,7 +62,7 @@ export class ProfilComponent implements OnInit {
     IMAGE_URL: "",
     COUNT_COMMENT: 0,
     COUNT_LIKE: 0,
-    DATE_POST:new Date(0),
+    DATE_POST:'',
     LIKES:[],
     COMMENTAIRES:[],
     USER_LIKE:'favorite',
@@ -75,7 +76,7 @@ export class ProfilComponent implements OnInit {
 
   abonnement:string="";
 
-  constructor(private domSanitizer:DomSanitizer,private amisService:AmisService,private utilisateurService:UtilisateurService,private profilService:ProfilService,private postService:PostService,private commentaireService:CommentaireService,private likeService:LikeService,private storage: AngularFireStorage,private router:Router) { }
+  constructor(@Inject(LOCALE_ID) private locale: string,private domSanitizer:DomSanitizer,private amisService:AmisService,private utilisateurService:UtilisateurService,private profilService:ProfilService,private postService:PostService,private commentaireService:CommentaireService,private likeService:LikeService,private storage: AngularFireStorage,private router:Router) { }
 
   ngOnInit(): void {
 
@@ -99,26 +100,42 @@ export class ProfilComponent implements OnInit {
         EMAIL_UTILISATEUR1:localStorage.getItem('email')+'',
         EMAIL_UTILISATEUR2:localStorage.getItem('emailVersProfil')+''
       }
+
+      if(localStorage.getItem('emailVersProfil')!=undefined){
+        console.log("gf")
+        this.amisService.getAbonnementByUtilisateur(localStorage.getItem('email')+'').then((resultat:any)=>{
+          console.log(resultat)
+          if(resultat.data==undefined){
+            this.abonnement="S'abonner"
+          }else{
+            resultat.data.filter((a:Amis)=>{this.listAmis.push(a.EMAIL_UTILISATEUR2)});
+            console.log("this.listAmis")
+            console.log(this.listAmis)
+            this.listAmis.every((a:string)=>{
+              console.log(a+"  ||  "+localStorage.getItem('emailVersProfil')+"")
+              if(a==localStorage.getItem('emailVersProfil')+""){
+                
+                this.abonnement="Se désabonner"
+                return false;
+              }else{
+                this.abonnement="S'abonner"
+                return true;
+              }
+              
+            })
+          }
+          
+  
+        })
+      }
+
  
 
     }).catch((err:any)=>{
       console.log(err);
     })
 
-    if(localStorage.getItem('emailVersProfil')!=undefined){
-      this.amisService.getAbonnementByUtilisateur(localStorage.getItem('email')+'').then((res:any)=>{
-        res.data.filter((a:Amis)=>{this.listAmis.push(a.EMAIL_UTILISATEUR2)});
-
-        this.listAmis.forEach((a:string)=>{
-          if(a==localStorage.getItem('emailVersProfil')+""){
-            this.abonnement="Se désabonner"
-          }else{
-            this.abonnement="S'abonner"
-          }
-        })
-
-      })
-    }
+    
 
     this.utilisateurService.getUtilisateur(this.email).then((res:any)=>{
       console.log(res);
@@ -129,14 +146,14 @@ export class ProfilComponent implements OnInit {
     })
 
     this.postService.getPostsByUtilisateur(this.email).then((result:any)=>{
-      console.log(result);
+      //console.log(result);
       result.data?.forEach((post:any) => {
         /*console.log("for");
         console.log(post);*/
         
         this.commentaireService.getCommentairesByPost(post.ID_POST).then(
           (resultat:any)=>{
-            console.log(resultat);
+            //console.log(resultat);
             post.COMMENTAIRES=[];
             post.COMMENTAIRES.push(resultat.data);
             console.log(post);
@@ -180,17 +197,17 @@ export class ProfilComponent implements OnInit {
           if(res.data!=undefined){
             
             this.likes.push(res.data);
-            console.log(this.likes);
-            console.log("likes kaynine");
+            //console.log(this.likes);
+            //console.log("likes kaynine");
             this.posts.forEach(post=>{
-              console.log('this.likes[0]');
-              console.log(this.likes[0]);
+              //console.log('this.likes[0]');
+              //console.log(this.likes[0]);
               this.likes[0].forEach((like:any)=>{
-                console.log('like');
-                console.log(like);
-                console.log("post :"+post.ID_POST+" like :"+like.ID_LIKE+like.ID_POST);
+                //console.log('like');
+                //console.log(like);
+                //console.log("post :"+post.ID_POST+" like :"+like.ID_LIKE+like.ID_POST);
                 if(post.ID_POST==like.ID_POST){
-                  console.error("post.ID_POST==like.ID_POST")
+                  //console.error("post.ID_POST==like.ID_POST")
                   post.USER_LIKE='favorite';
                 }
                 
@@ -265,16 +282,11 @@ export class ProfilComponent implements OnInit {
           COUNT_LIKE:0,
           LIKES:[],
           COMMENTAIRES:[],
-          DATE_POST:new Date(),
+          DATE_POST:formatDate(Date.now(),'YYYY/MM/dd',this.locale) ,
           USER_LIKE:'favorite_border',
           PHOTO_DE_PROFIL:this.profilImage+""
         }
         
-        this.postService.createNewPost(this.myPost).then((res)=>{
-          console.log(this.myPost)
-          this.posts.push(this.myPost);
-          console.log("ajout succées");
-        })
         
       }else{
         this.uploadImage().then((imageUrl)=>{
@@ -287,18 +299,20 @@ export class ProfilComponent implements OnInit {
             COUNT_LIKE:0,
             LIKES:[],
             COMMENTAIRES:[],
-            DATE_POST:new Date(),
+            DATE_POST:formatDate(Date.now(),'YYYY/MM/dd',this.locale),
             USER_LIKE:'favorite_border',
             PHOTO_DE_PROFIL:this.profilImage+""
           }
           
-          this.postService.createNewPost(this.myPost).then((res)=>{
-            console.log(this.myPost)
-            this.posts.push(this.myPost);
-            console.log("ajout succées");
-          })
         })
       }
+      console.log(this.myPost.DATE_POST);
+        
+        this.postService.createNewPost(this.myPost).then((res)=>{
+          console.log(this.myPost)
+          this.posts.push(this.myPost);
+          console.log("ajout succées");
+        })
     })
     
   }
@@ -308,8 +322,12 @@ export class ProfilComponent implements OnInit {
 
   like(idPost:any,i:number){
     this.likeicon = !this.likeicon;
+    if(idPost==undefined){
+
+    }
     this.likeService.getLikeByUserAndByPost(idPost,this.email).then(
       (res:any)=>{
+        console.log(res)
         if(res.data==undefined){
           let myLike:Like={
             EMAIL_UTILISATEUR:this.email,
@@ -379,7 +397,13 @@ export class ProfilComponent implements OnInit {
     this.commentaireService.createNewCommentaire(myCommentaire).then(
       (res)=>{
         if(idPost==this.posts[this.posts.length-i-1].ID_POST){
-          this.posts[this.posts.length-i-1].COMMENTAIRES?.[0]?.push(myCommentaire);
+          if(this.posts[this.posts.length-i-1].COMMENTAIRES[0]==undefined){
+            this.posts[this.posts.length-i-1].COMMENTAIRES[0]=[myCommentaire];
+            console.log(1);
+          }else{
+            this.posts[this.posts.length-i-1].COMMENTAIRES[0].push(myCommentaire);
+            console.log(2);
+          }
           console.log("ajout commentaire");
           this.posts[this.posts.length-i-1].COUNT_COMMENT++;
           this.commentText[i]="";
@@ -420,7 +444,7 @@ export class ProfilComponent implements OnInit {
         EMAIL_UTILISATEUR2:localStorage.getItem('emailVersProfil')+''
       }
       this.amisService.desabonner(this.ami).then((res:any)=>{
-        this.listAmis.splice(index,index);
+        this.listAmis.splice(index,1);
         this.abonnement="S'abonner";
         console.log("Désabonnement succeés");
       }).catch((err:any)=>{

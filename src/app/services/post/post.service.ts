@@ -19,7 +19,7 @@ export class PostService {
     
     LIKES:[],
     COMMENTAIRES:[],
-    DATE_POST:new Date(),
+    DATE_POST:'',
     USER_LIKE:'',
     PHOTO_DE_PROFIL:''
   }
@@ -64,6 +64,21 @@ export class PostService {
     return new Promise((resolve, reject) =>
       {
         this.http.get(this.apiURL+"/EMAIL_UTILISATEUR/"+email)
+        .subscribe
+        (
+          res=>{
+            resolve(res);
+          },err=>{
+            reject(err);
+          }
+        )
+      }
+    )
+  }
+  getPostsByUtilisateurOrderedByDate(email:string) {
+    return new Promise((resolve, reject) =>
+      {
+        this.http.get(this.apiURL+"/EMAIL_UTILISATEUR/"+email+"/DATE/any")
         .subscribe
         (
           res=>{

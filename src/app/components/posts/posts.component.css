@@ -1,9 +1,9 @@
 .container{
     display:flex;
-    justify-content:center;
+    justify-content:flex-start;
     align-items: center;
     flex-direction: column;
-
+    min-height:100vh;
   }
 
 .poster{
@@ -107,3 +107,34 @@ b{
 .comment-form-field{
   width: 80%;
 }
+
+
+/* Landscape phone to portrait tablet */
+@media (min-width: 767px) and (max-width: 936px) {
+
+}
+
+/* Landscape phones and down */
+@media (min-width: 480px) and (max-width: 767px) {
+
+  
+}
+
+@media (max-width: 480px) {  
+  .poster{
+    max-width: 350px;
+  }
+  .poster >.mat-form-field{
+    width: 340px;
+  }
+  .example-card {
+    min-width: 330px;
+    max-width: 330px;
+    
+  }
+}
+
+@media (max-width: 320px) {  
+
+}
+

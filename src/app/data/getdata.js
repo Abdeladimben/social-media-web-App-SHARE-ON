@@ -1,5 +1,6 @@
 
 
+
 let express = require("express");
 const cors = require('cors');
 const bodyParser = require('body-parser');
@@ -8,7 +9,10 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-
+let http=require('http');
+let server=http.Server(app);
+let socketIO=require('socket.io');
+let io=socketIO(server);
 
 const port=process.env.PORT || 3000;
 
@@ -17,6 +21,7 @@ oracledb.outFormat = oracledb.OUT_FORMAT_OBJECT;
 
 
 let connection;
+let id;
 
 async function run() {
 	try {
@@ -68,6 +73,14 @@ async function getProfilByList(values) {
 	
 	let sqlReq;
 	sqlReq = "SELECT * FROM profil where email in ("+lastValues+")";
+	const result = await connection.execute(sqlReq);
+	return result;
+}
+
+
+
+async function getPostsOrderByDate(email) {	
+	sqlReq = "SELECT * FROM post where email_utilisateur='"+email+"' order by date_post DESC";
 	const result = await connection.execute(sqlReq);
 	return result;
 }
@@ -150,6 +163,20 @@ async function getProfilByList(values) {
             }
         })
 
+        app.get('/message', async function (req, res) {
+            console.log("get message");
+            const resultat = (await getTables("message",null,null,null,null)).rows;
+            if (resultat.length > 0) {
+                res.send({
+                    message: "ALL message data",
+                    data: resultat
+                });
+            } else {
+                res.send({
+                    message: "message data not found",
+                });
+            }
+        })
 
 		app.get('/amis', async function (req, res) {
             console.log("get amis");
@@ -278,6 +305,21 @@ app.get('/commentaires/:id_commentaire', async function (req, res) {
         
 
 
+app.get('/message/:id_message', async function (req, res) {
+	console.log("get message");
+	const resultat = (await getTables("message","idlangue",req.params.id_message,null,null)).rows;
+	if (resultat.length > 0) {
+		res.send({
+			message: req.params.id_message+" ALL message data",
+			data: resultat
+		});
+	} else {
+		res.send({
+			message: req.params.id_message+" message data not found",
+		});
+	}
+})
+
 app.get('/amis/:id_ami', async function (req, res) {
 	console.log(req.params.id_post+" post data");
 	const resultat = (await getTables("post","id_post",req.params.id_post,null,null)).rows;
@@ -358,6 +400,40 @@ app.get('/commentaires/?EMAIL_UTILISATEUR/:email_utilisateur', async function (r
         
 
 
+app.get('/message/?EMAIL_EMETTEUR/:email_emetteur', async function (req, res) {
+	console.log(req.params.email_emetteur+"candidat message data");
+	const resultat = (await getTables("message","email_emetteur",req.params.email_emetteur,null,null)).rows;
+	if (resultat.length > 0) {
+		console.log(req.params.email_emetteur+" message succées");
+		res.send({
+			message: req.params.email_emetteur+"candidat message data",
+			data: resultat
+		});
+	} else {
+		res.send({
+			message: req.params.email_emetteur+" message data not found",
+		});
+	}
+})
+
+        
+
+app.get('/message/?EMAIL_RECEPTEUR/:email_recepteur', async function (req, res) {
+	console.log(req.params.email_recepteur+"candidat message data");
+	const resultat = (await getTables("message","email_recepteur",req.params.email_recepteur,null,null)).rows;
+	if (resultat.length > 0) {
+		console.log(req.params.email_recepteur+" message succées");
+		res.send({
+			message: req.params.email_recepteur+"candidat message data",
+			data: resultat
+		});
+	} else {
+		res.send({
+			message: req.params.email_recepteur+" message data not found",
+		});
+	}
+})
+
 
 app.get('/amis/?EMAIL_UTILISATEUR1/:email_utilisateur1', async function (req, res) {
 	console.log(req.params.email_utilisateur1+"candidat email_utilisateur1 data");
@@ -387,6 +463,28 @@ app.get('/amis/?EMAIL_UTILISATEUR2/:email_utilisateur2', async function (req, re
 	} else {
 		res.send({
 			message: req.params.email_utilisateur2+" amis 2 data not found",
+		});
+	}
+})
+
+
+            ///////////////
+            ///////////////       GET DATA WITH utilisateur ORDERED BY DATE
+            ///////////////
+
+
+app.get('/post/?EMAIL_UTILISATEUR/:email_utilisateur&DATE/any', async function (req, res) {
+	console.log(req.params.email_utilisateur+" user post data order by date");
+	const resultat = (await getPostsOrderByDate(req.params.email_utilisateur)).rows;
+	if (resultat.length > 0) {
+		console.log(req.params.email_utilisateur+" user post succées order by date");
+		res.send({
+			message: req.params.email_utilisateur+" user POST likes data order by date",
+			data: resultat
+		});
+	} else {
+		res.send({
+			message: req.params.email_utilisateur+" user post order by date data not found",
 		});
 	}
 })
@@ -485,12 +583,13 @@ async function insertdata(table,pid, p2, p3, p4,p5, p6, p7, p8,p9) {
         })
 
     }else if(table=="post"){
-        connection.execute("insert into post(id_post,email_utilisateur,nom_profil,text,image_url,date_post,photo_de_profil) values(post_id_seq.NEXTVAL,:email_utilisateur,:nom_profil,:text,:image_url,to_date(sysdate,'YYYY/MM/DD'),:photo_de_profil)", {
+        connection.execute("insert into post(id_post,email_utilisateur,nom_profil,text,image_url,date_post,photo_de_profil) values(post_id_seq.NEXTVAL,:email_utilisateur,:nom_profil,:text,:image_url,to_date(:date_post,'YYYY/MM/DD'),:photo_de_profil)", {
 			email_utilisateur: p2,
 			nom_profil: p3,
 			text: p4,
 			image_url: p5,
-			photo_de_profil: p6
+			date_post:p6,
+			photo_de_profil: p7
         }, {
             autoCommit: true
         })
@@ -508,6 +607,16 @@ async function insertdata(table,pid, p2, p3, p4,p5, p6, p7, p8,p9) {
 			nom_utilisateur: p3,
 			id_post: p4,
 			texte: p5,
+        }, {
+            autoCommit: true
+        })
+    }else if(table=="message"){
+        connection.execute("insert into message values(message_id_seq.NEXTVAL,:email_emetteur,:email_recepteur,:text,:image_url,to_date(:date_message,'YYYY/MM/DD'))", {
+            email_emetteur: p2,
+            email_recepteur: p3,
+			text: p4,
+			image_url: p5,
+			date_message: p6
         }, {
             autoCommit: true
         })
@@ -552,13 +661,14 @@ app.post('/profil', async function (req, res) {
 })
 
 app.post('/post', async function (req, res) {
+	let ID_POST = req.body.ID_POST;
 	let EMAIL_UTILISATEUR = req.body.EMAIL_UTILISATEUR;
 	let NOM_PROFIL = req.body.NOM_PROFIL;
 	let TEXT = req.body.TEXT;
 	let IMAGE_URL = req.body.IMAGE_URL;
-
+	let DATE_POST = req.body.DATE_POST;
 	let PHOTO_DE_PROFIL= req.body.PHOTO_DE_PROFIL;
-	insertdata('post', null, EMAIL_UTILISATEUR,NOM_PROFIL,TEXT,IMAGE_URL,PHOTO_DE_PROFIL,null,null,null);
+	insertdata('post', null, EMAIL_UTILISATEUR,NOM_PROFIL,TEXT,IMAGE_URL,DATE_POST,PHOTO_DE_PROFIL,null,null);
 	res.send({
 		message: "post data inserted"
 	})
@@ -578,6 +688,7 @@ app.post('/likes', async function (req, res) {
 })
 
 app.post('/commentaires', async function (req, res) {
+	let ID_COMMENTAIRE = req.body.ID_COMMENTAIRE;
 	let EMAIL_UTILISATEUR = req.body.EMAIL_UTILISATEUR;
 	let NOM_UTILISATEUR = req.body.NOM_UTILISATEUR;
 	let ID_POST = req.body.ID_POST;
@@ -591,6 +702,21 @@ app.post('/commentaires', async function (req, res) {
 	console.log("commentaires data inserted")
 })
 
+
+app.post('/message', async function (req, res) {
+	let ID_MESSAGE = req.body.ID_MESSAGE;
+	let EMAIL_EMETTEUR = req.body.EMAIL_EMETTEUR;
+	let EMAIL_RECEPTEUR = req.body.EMAIL_RECEPTEUR;
+	let TEXT = req.body.TEXT;
+	let IMAGE_URL = req.body.IMAGE_URL;
+	let DATE_MESSAGE = req.body.DATE_MESSAGE;
+
+	insertdata("message", ID_MESSAGE, EMAIL_EMETTEUR,EMAIL_RECEPTEUR,TEXT,IMAGE_URL,DATE_MESSAGE,null,null,null);
+	res.send({
+		message: "message data inserted"
+	})
+	console.log("message data inserted")
+})
 
 
 app.post('/amis', async function (req, res) {
@@ -608,21 +734,107 @@ app.post('/amis', async function (req, res) {
 
 
 
-app.delete('/likes/:id_like', async function (req, res) {
+
+
+            //////////////
+            //////////////          DELETE DATA
+            /////////////
+
+
+app.delete('/utilisateur/:email', async function (req, res) {
 	connection = await run();
-	await connection.execute("delete from likes where id_like ='" + req.params.id_like+ "'")
+	await connection.execute("delete from utilisateur where email ='" + req.params.email+ "'")
 	connection.commit();
 	res.send({
-		message: 'account data deleted'
+		message: 'utilisateur data deleted'
 	})
-	console.log('account data deleted')
+	console.log('utilisateur data deleted')
+})
+
+
+app.delete('/profil/:email', async function (req, res) {
+	connection = await run();
+	await connection.execute("delete from profil where email='" + req.params.email + "'")
+	connection.commit();
+	res.send({
+		message: 'profil data deleted'
+	})
+	console.log('profil data deleted')
+})
+
+app.delete('/post/:id_post', async function (req, res) {
+	connection = await run();
+	await connection.execute("delete from post where id_post='" + req.params.id_post+"'")
+	connection.commit();
+	res.send({
+		message: 'post data deleted'
+	})
+	console.log('post data deleted')
+})
+
+app.delete('/likes/:id_like', async function (req, res) {
+	connection = await run();
+	await connection.execute("delete from likes where id_like='" + req.params.id_like+"'")
+	connection.commit();
+	res.send({
+		message: 'likes data deleted'
+	})
+	console.log('likes data deleted')
+})
+
+app.delete('/commentaires/:id_commentaire', async function (req, res) {
+	connection = await run();
+	await connection.execute("delete from commentaires where id_commentaire='" + req.params.id_commentaire+"'")
+	connection.commit();
+	res.send({
+		message: 'commentaires data deleted'
+	})
+	console.log('commentaires data deleted')
+})
+
+app.delete('/message/:id_message', async function (req, res) {
+	connection = await run();
+	await connection.execute("delete from message where id_message='" + req.params.id_message+"'")
+	connection.commit();
+	res.send({
+		message: 'message data deleted'
+	})
+	console.log('message data deleted')
+})
+
+app.delete('/amis/:id_ami', async function (req, res) {
+	connection = await run();
+	await connection.execute("delete from amis where id_ami='" + req.params.id_ami+"'")
+	connection.commit();
+	res.send({
+		message: 'amis data deleted'
+	})
+	console.log('amis data deleted')
+})
+
+app.delete('/amis/?EMAIL_UTILISATEUR1/:email_utilisateur1/?EMAIL_UTILISATEUR2/:email_utilisateur2', async function (req, res) {
+	connection = await run();
+	await connection.execute("delete from amis where EMAIL_UTILISATEUR1='" + req.params.email_utilisateur1+"' and EMAIL_UTILISATEUR2='"+req.params.email_utilisateur2+"'")
+	connection.commit();
+	res.send({
+		message: 'amis data deleted'
+	})
+	console.log('amis data deleted')
 })
 
 
 
-app.listen(port, () => {
+
+
+server.listen(port, () => {
 	console.log("server running ... in "+port);
 })
+
+
+
+
+
+
 
 
 

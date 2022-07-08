@@ -9,7 +9,7 @@ export interface Post {
     IMAGE_URL:string,
     COUNT_COMMENT:number,
     COUNT_LIKE:number,
-    DATE_POST:Date,
+    DATE_POST:string,
     PHOTO_DE_PROFIL:string,
     LIKES:Array<Like>,
     COMMENTAIRES:Array<any>,
